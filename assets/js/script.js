@@ -4,6 +4,7 @@ const apiKey = 'c9e40c09a45f7eb4933e845e6cba1939';
 const currentHumidity = document.querySelector('.humidity');
 const searchBtn = document.querySelector('.btn');
 const userInput = document.querySelector('.form-input');
+const fiveDayEl = document.querySelector('#five-day');
 
 
 var geoCodeApi = function(event) {
@@ -22,8 +23,8 @@ var oneCallApi = function(data) {
     fetch('https://api.openweathermap.org/data/2.5/onecall?lat=' + cityObj.lat + '&lon=' + cityObj.lon + '&units=imperial&appid=' + apiKey)
     .then(response => response.json()) 
     .then(data => {
-    console.log(data);
     createCard(data.current, '#current');
+    // fiveDay(data.daily, );
 })
 
 }
@@ -50,4 +51,17 @@ var createCard = function(current, elementId) {
     weatherContainer.appendChild(uvIndex);
  
 }
+
+var fiveDay = function() {
+    var dailyTemp = document.createElement('p');
+    var dailyWind = document.createElement('p');
+    var dailyHumidity = document.createElement('p');
+
+    dailyTemp.textContent = daily.temp;
+    dailyWind.textContent = daily.wind_speed;
+    dailyHumidity.textContent = daily.humidity;
+
+    
+}
+
 
