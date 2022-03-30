@@ -5,8 +5,6 @@ const searchBtn = document.querySelector('.btn');
 const userInput = document.querySelector('.form-input');
 
 
-
-
 var geoCodeApi = function(event) {
     event.preventDefault();
     fetch('http://api.openweathermap.org/geo/1.0/direct?q=' + userInput.value + '&limit=1&appid=' + apiKey)
@@ -37,9 +35,9 @@ var createCard = function(current, elementId) {
     var humidity = document.createElement('p');
     var uvIndex = document.createElement('p');
 
-    // var currentDate = luxon.DateTime.local().toFormat('MM-dd-yyyy');
+    const currentDate = luxon.DateTime.local().toFormat('MM/dd/yyyy');
 
-    cityName.textContent = userInput.value;
+    cityName.textContent = userInput.value + ' (' + currentDate + ')';
     temp.textContent = 'Temp:' + current.temp;
     wind.textContent = 'Wind: ' + current.wind_speed;
     humidity.textContent = 'Humidity: ' + current.humidity;
@@ -77,7 +75,7 @@ var fiveDayElement = function(daily, elementId) {
 
         const dateDay = luxon.DateTime.local().plus({
             days: i + 1
-        }).toFormat('MM-dd-yyyy');
+        }).toFormat('MM/dd/yyyy');
 
         date.textContent = dateDay
         temp.textContent = 'Temp: ' + daily[i].temp.day;
