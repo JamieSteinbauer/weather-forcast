@@ -38,6 +38,7 @@ var oneCallApi = function(data) {
 var createCard = function(current, elementId) {
     //create each element for the card
     var cityName = document.createElement('h1');
+    var icon = document.createElement('img');
     var temp = document.createElement('p');
     var wind = document.createElement('p');
     var humidity = document.createElement('p');
@@ -45,9 +46,12 @@ var createCard = function(current, elementId) {
 
     // use luxon to update date
     const currentDate = luxon.DateTime.local().toFormat('MM/dd/yyyy');
+    icon.src = 'http://openweathermap.org/img/wn/' + current.weather[0].icon + '@2x.png';
+    
 
     //add textcontent to each element
     cityName.textContent = userInput.value + ' (' + currentDate + ')';
+    
     temp.textContent = 'Temp:' + current.temp;
     wind.textContent = 'Wind: ' + current.wind_speed;
     humidity.textContent = 'Humidity: ' + current.humidity;
@@ -55,7 +59,8 @@ var createCard = function(current, elementId) {
 
     //append to the created weather container id current
     const weatherContainer = document.querySelector(elementId);
-    weatherContainer.appendChild(cityName);
+    // double append city name and icon
+    weatherContainer.appendChild(cityName).appendChild(icon);
     weatherContainer.appendChild(temp);
     weatherContainer.appendChild(wind);
     weatherContainer.appendChild(humidity);
@@ -74,7 +79,6 @@ var createCard = function(current, elementId) {
         uvIndex.setAttribute('style', 'color: white; background-color: purple;');
     }
 }
-
 
 //five day forecast, fetch onecall api
 var fiveDayForecast = function(data) {
@@ -100,6 +104,7 @@ var fiveDayElement = function(daily, elementId) {
     const index = daily.length - 3;
     for (let i = 0; i < index; i++) {
         const date = document.createElement('h2');
+        const icon = document.createElement('img');
         const temp = document.createElement('p');
         const wind = document.createElement('p');
         const humidity = document.createElement('p');
@@ -109,6 +114,9 @@ var fiveDayElement = function(daily, elementId) {
           days: i + 1
         }).toFormat('MM/dd/yyyy');
 
+        //each icon for the five day forecast
+        icon.src = 'http://openweathermap.org/img/wn/' + daily[i].weather[0].icon + '@2x.png';
+
         //cycle through object to get specific data
         date.textContent = dateDay
         temp.textContent = 'Temp: ' + daily[i].temp.day;
@@ -116,10 +124,11 @@ var fiveDayElement = function(daily, elementId) {
         humidity.textContent = 'Humidity: ' + daily[i].humidity;
         
         //append to five-day id container
-        fiveDay.appendChild(date);
+        fiveDay.appendChild(date).appendChild(icon);
         fiveDay.appendChild(temp);
         fiveDay.appendChild(wind);
         fiveDay.appendChild(humidity);
     }
 }
+
 
