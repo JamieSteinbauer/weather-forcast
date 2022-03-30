@@ -66,6 +66,12 @@ var fiveDayForecast = function(data) {
 //five day element which limits the daily index to 5
 var fiveDayElement = function(daily, elementId) {
     const fiveDay = document.querySelector(elementId);
+
+    const header = document.createElement('h1');
+    header.setAttribute('style', 'padding: 10px;');
+    header.textContent = 'Five Day Forecast';
+    fiveDay.appendChild(header);
+
     const index = daily.length - 3;
     for (let i = 0; i < index; i++) {
         const date = document.createElement('h2');
@@ -74,14 +80,14 @@ var fiveDayElement = function(daily, elementId) {
         const humidity = document.createElement('p');
 
         const dateDay = luxon.DateTime.local().plus({
-            days: i + 1
+          days: i + 1
         }).toFormat('MM/dd/yyyy');
 
         date.textContent = dateDay
         temp.textContent = 'Temp: ' + daily[i].temp.day;
         wind.textContent = 'Wind: ' + daily[i].wind_speed;
         humidity.textContent = 'Humidity: ' + daily[i].humidity;
-
+        
         fiveDay.appendChild(date);
         fiveDay.appendChild(temp);
         fiveDay.appendChild(wind);
