@@ -38,10 +38,10 @@ var createCard = function(current, elementId) {
     var uvIndex = document.createElement('p');
 
     cityName.textContent = userInput.value;
-    temp.textContent = current.temp;
-    wind.textContent = current.wind_speed;
-    humidity.textContent = current.humidity;
-    uvIndex.textContent = current.uvi;
+    temp.textContent = 'Temp:' + current.temp;
+    wind.textContent = 'Wind: ' + current.wind_speed;
+    humidity.textContent = 'Humidity: ' + current.humidity;
+    uvIndex.textContent = 'UV Index: ' + current.uvi;
 
     const weatherContainer = document.querySelector(elementId);
     weatherContainer.appendChild(cityName);
