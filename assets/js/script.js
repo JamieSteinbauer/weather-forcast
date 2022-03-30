@@ -37,6 +37,8 @@ var createCard = function(current, elementId) {
     var humidity = document.createElement('p');
     var uvIndex = document.createElement('p');
 
+    // var currentDate = luxon.DateTime.local().toFormat('MM-dd-yyyy');
+
     cityName.textContent = userInput.value;
     temp.textContent = 'Temp:' + current.temp;
     wind.textContent = 'Wind: ' + current.wind_speed;
@@ -73,7 +75,11 @@ var fiveDayElement = function(daily, elementId) {
         const wind = document.createElement('p');
         const humidity = document.createElement('p');
 
-        date.textContent = daily[i].dt;
+        const dateDay = luxon.DateTime.local().plus({
+            days: i + 1
+        }).toFormat('MM-dd-yyyy');
+
+        date.textContent = dateDay
         temp.textContent = 'Temp: ' + daily[i].temp.day;
         wind.textContent = 'Wind: ' + daily[i].wind_speed;
         humidity.textContent = 'Humidity: ' + daily[i].humidity;
@@ -85,31 +91,3 @@ var fiveDayElement = function(daily, elementId) {
     }
 }
 
-// fiveDayForecast = function(data) {
-//     const cityObj = data[0];
-//     fetch('https://api.openweathermap.org/data/2.5/onecall?lat=' + cityObj.lat + '&lon=' + cityObj.lon + '&units=imperial&appid=' + apiKey)
-//     .then(response => response.json())
-//     .then(data => {
-//         fiveDayElement(data.daily, '#five-day');
-//     })
-// }
-// //display fiveDayForecast
-// var fiveDayElement = function(list, elementId) {
-//     const fiveDay = document.querySelector(elementId);
-//     for (let i = 0; i < list.length; i++) {
-//         const date = document.createElement('h2');
-//         const temp = document.createElement('p');
-//         const wind = document.createElement('p');
-//         const humidity = document.createElement('p');
-
-//         date.textContent = 'Date: ' + list[i].dt_txt;
-//         temp.textContent = 'Temp: ' + list[i].main.temp;
-//         wind.textContent = 'Wind: ' + list[i].wind.speed;
-//         humidity.textContent = 'Humidity: ' + list[i].main.humidity;
-
-//         fiveDay.appendChild(date);
-//         fiveDay.appendChild(temp);
-//         fiveDay.appendChild(wind);
-//         fiveDay.appendChild(humidity);
-//     }
-// }
