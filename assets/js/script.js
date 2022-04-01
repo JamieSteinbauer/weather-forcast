@@ -16,6 +16,8 @@ var geoCodeApi = function(event) {
         //calls other functions
         oneCallApi(data);
         fiveDayForecast(data);
+        saveCity(userInput.value);
+        displayHistory();
     })
 }
 
@@ -77,8 +79,16 @@ var createCard = function(current, elementId) {
         uvIndex.setAttribute('style', 'color: white; background-color: red;');
     } else {
         uvIndex.setAttribute('style', 'color: white; background-color: purple;');
-    }
-}
+    };
+
+    //when searching for a city, it will replace the current city
+    weatherContainer.textContent = '';
+    weatherContainer.appendChild(cityName).appendChild(icon);
+    weatherContainer.appendChild(temp);
+    weatherContainer.appendChild(wind);
+    weatherContainer.appendChild(humidity);
+    weatherContainer.appendChild(uvIndex);
+};
 
 //five day forecast, fetch onecall api
 var fiveDayForecast = function(data) {
@@ -102,6 +112,7 @@ var fiveDayElement = function(daily, elementId) {
 
     // only append five day forecast as onecall has many more in object array
     const index = daily.length - 3;
+
     for (let i = 0; i < index; i++) {
         const date = document.createElement('h2');
         const icon = document.createElement('img');
@@ -129,6 +140,56 @@ var fiveDayElement = function(daily, elementId) {
         fiveDay.appendChild(wind);
         fiveDay.appendChild(humidity);
     }
+
+    //replaces the first searched five-day forecast with the new five-day when searching for a new city
+    fiveDay.textContent = '';
+    fiveDay.appendChild(header);
+    for (let i = 0; i < index; i++) {
+        const date = document.createElement('h2');
+        const icon = document.createElement('img');
+        const temp = document.createElement('p');
+        const wind = document.createElement('p');
+        const humidity = document.createElement('p');
+
+        //use luxon to show the next five day forecast
+        const dateDay = luxon.DateTime.local().plus({
+          days: i + 1
+        }).toFormat('MM/dd/yyyy');
+
+        //each icon for the five day forecast
+        icon.src = 'http://openweathermap.org/img/wn/' + daily[i].weather[0].icon + '@2x.png';
+
+        //cycle through object to get specific data
+        date.textContent = dateDay
+        temp.textContent = 'Temp: ' + daily[i].temp.day;
+        wind.textContent = 'Wind: ' + daily[i].wind_speed;
+        humidity.textContent = 'Humidity: ' + daily[i].humidity;
+        
+        //append to five-day id container
+        fiveDay.appendChild(date).appendChild(icon);
+        fiveDay.appendChild(temp);
+        fiveDay.appendChild(wind);
+        fiveDay.appendChild(humidity);
+}
+};
+
+const history = {
+    cities: []
 }
 
+var saveCity = function(city) {
+   history.cities.push(city);
+   localStorage.setItem('history', JSON.stringify(history));
+}
 
+var displayHistory = function() {
+    const historyList= document.querySelector('#history');
+    historyList.textContent = '';
+    for (let i =0; i < history.cities.length; i++) {
+        const city= history.cities[i];
+        const historyBtn = document.createElement('button');
+
+        historyBtn.textContent = city;
+        historyList.appendChild(historyBtn);
+    }
+}
