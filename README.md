@@ -9,4 +9,5 @@
 https://jamiesteinbauer.github.io/weather-forecast/
 
 ## Screenshot!
-[_Users_jamiesteinbauer_Desktop_weather_index html](https://user-images.githubusercontent.com/97713001/161445431-1a2a1c10-3d05-4a9c-b272-6bfe7439111b.png)
+
+![_Users_jamiesteinbauer_Desktop_weather_index html](https://user-images.githubusercontent.com/97713001/161445475-7006f362-96f5-4d60-9a9c-628ae7aa4e91.png)
