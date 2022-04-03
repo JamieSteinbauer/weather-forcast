@@ -15,9 +15,11 @@ var geoCodeApi = function(event) {
     .then(data => {
         //calls other functions
         oneCallApi(data);
+
         fiveDayForecast(data);
-        saveCity(userInput.value);
-        displayHistory();
+
+        //calls store history function
+        storeHistory(userInput.value);
     })
 }
 
@@ -27,19 +29,21 @@ searchBtn.addEventListener('click', geoCodeApi);
 //one call api for longtitude and latitude
 var oneCallApi = function(data) {
     var cityObj = data[0]
-    fetch('https://api.openweathermap.org/data/2.5/onecall?lat=' + cityObj.lat + '&lon=' + cityObj.lon + '&units=imperial&appid=' + apiKey)
-    .then(response => response.json()) 
+    fetch('https://api.openweathermap.org/data/2.5/onecall?lat=' + cityObj.lat + '&lon=' + cityObj.lon + '&units=imperial&appid=' + apiKey).then(response => response.json()) 
     .then(data => {
     //function to create card for current weather
-    createCard(data.current, '#current');
+    createCard(data.current, '#current', cityObj.name);
+
+    displayHistory(data.current, '#current');
 })
 
 }
 
 // function to create current weather card
-var createCard = function(current, elementId) {
+var createCard = function(current, elementId, city) {
     //create each element for the card
     var cityName = document.createElement('h1');
+    cityName.setAttribute('id', 'cityName');
     var icon = document.createElement('img');
     var temp = document.createElement('p');
     var wind = document.createElement('p');
@@ -52,9 +56,9 @@ var createCard = function(current, elementId) {
     
 
     //add textcontent to each element
-    cityName.textContent = userInput.value + ' (' + currentDate + ')';
+    cityName.textContent = city + ' (' + currentDate + ')';
     
-    temp.textContent = 'Temp:' + current.temp;
+    temp.textContent = 'Temp: ' + current.temp;
     wind.textContent = 'Wind: ' + current.wind_speed;
     humidity.textContent = 'Humidity: ' + current.humidity;
     uvIndex.textContent = 'UV Index: ' + current.uvi;
@@ -97,6 +101,8 @@ var fiveDayForecast = function(data) {
     .then(reponse => reponse.json())
     .then(data => {
         fiveDayElement(data.daily, '#five-day');
+
+        displayHistory(data.daily, '#five-day');
     })
 }
 
@@ -173,23 +179,57 @@ var fiveDayElement = function(daily, elementId) {
 }
 };
 
-const history = {
+// creates history object to store the searched cities
+const history = JSON.parse(localStorage.getItem('history')) || {
     cities: []
+};
+
+//function to store the searched cities in the history object
+const storeHistory = function(city) {
+    //pushes the searched city into the history object
+    history.cities.unshift(city);
+
+    //saves tthe history object to local storage
+    localStorage.setItem('history', JSON.stringify(history));
+
+    displayHistory();
 }
 
-var saveCity = function(city) {
-   history.cities.push(city);
-   localStorage.setItem('history', JSON.stringify(history));
-}
-
-var displayHistory = function() {
-    const historyList= document.querySelector('#history');
+//function to display the searched cities in the history object
+const displayHistory = function() {
+    //variable to get the history object from localStorage
+    const historyList = document.querySelector('#history');
     historyList.textContent = '';
-    for (let i =0; i < history.cities.length; i++) {
-        const city= history.cities[i];
-        const historyBtn = document.createElement('button');
 
-        historyBtn.textContent = city;
-        historyList.appendChild(historyBtn);
+    let length = history.cities.length;
+
+    if (history.cities.length > 5) {
+        length = 5;
+    } else {
+        length = history.cities.length;
+    }
+
+    //loop to show the searched cities as buttons
+    for (let i = 0; i < length; i++) {
+        //variable for the cities in the array
+        const city = history.cities[i];
+
+        //variable to create the button for the searched cities
+        const historyButton = document.createElement('button');
+        historyButton.textContent = city;
+        historyList.appendChild(historyButton);
+
+        //event listener to get item from localStorage and display the searched city
+        historyButton.addEventListener('click', function() {
+            fetch('https://api.openweathermap.org/data/2.5/weather?q=' + historyButton.textContent + '&units=imperial&appid=' + apiKey)
+            .then(response => response.json())
+            .then(data => {
+                //calling current weather function for previously searched city
+                oneCallApi(data);
+                //calling the five day forecast for previously searched city
+                fiveDayForecast(data);
+            })
+        })
     }
 }
+displayHistory();
