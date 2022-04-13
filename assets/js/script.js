@@ -10,7 +10,7 @@ var geoCodeApi = function(event) {
     //prevents page reload on form submission
     event.preventDefault();
     //fetches api
-    fetch('http://api.openweathermap.org/geo/1.0/direct?q=' + userInput.value + '&limit=1&appid=' + apiKey)
+    fetch('https://api.openweathermap.org/geo/1.0/direct?q=' + userInput.value + '&limit=1&appid=' + apiKey)
     .then(response => response.json())
     .then(data => {
         //calls other functions
