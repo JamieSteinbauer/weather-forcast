@@ -52,7 +52,7 @@ var createCard = function(current, elementId, city) {
 
     // use luxon to update date
     const currentDate = luxon.DateTime.local().toFormat('MM/dd/yyyy');
-    icon.src = 'http://openweathermap.org/img/wn/' + current.weather[0].icon + '@2x.png';
+    icon.src = 'https://openweathermap.org/img/wn/' + current.weather[0].icon + '@2x.png';
     
 
     //add textcontent to each element
@@ -132,7 +132,7 @@ var fiveDayElement = function(daily, elementId) {
         }).toFormat('MM/dd/yyyy');
 
         //each icon for the five day forecast
-        icon.src = 'http://openweathermap.org/img/wn/' + daily[i].weather[0].icon + '@2x.png';
+        icon.src = 'https://openweathermap.org/img/wn/' + daily[i].weather[0].icon + '@2x.png';
 
         //cycle through object to get specific data
         date.textContent = dateDay
@@ -163,7 +163,7 @@ var fiveDayElement = function(daily, elementId) {
         }).toFormat('MM/dd/yyyy');
 
         //each icon for the five day forecast
-        icon.src = 'http://openweathermap.org/img/wn/' + daily[i].weather[0].icon + '@2x.png';
+        icon.src = 'https://openweathermap.org/img/wn/' + daily[i].weather[0].icon + '@2x.png';
 
         //cycle through object to get specific data
         date.textContent = dateDay
